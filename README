@@ -1,0 +1,47 @@
+
+VSA Peer Cache - A protocol for distributed caches
+=====================================================
+
++------------+
+|    ASN     |=> *_asn.c (Sample Associations)
++------------+
+|  Protocol  |=> vpc_protocol.c
++------------+
+|  Transport |=> _usock.c/_ksock.c
++------------+
+
+
+include/
+	vpc_api.h - Protocol API for ASNs
+	vpc_transp.h - Common transport API (kernel sockets, RDMA etc.)
+
+common/
+	vpc_protocol.c - Implements the protocol API. Client of transport.
+			 Fully OS independent.
+	vpc_protocol.h - Private to protocol. On the wire and other structs.
+
+utest/
+	clnt_asn.c - sample ASN client using API in vpc_api.h.
+	svr_asn.c  - sample ASN server.
+	vpc_usock.c - user-level transport over socket implementation.
+
+linux/
+	vpc.c	- kernel module/char driver.
+	vpcioc.c - ioctls for test.
+	vpc_ksock.c - kernel socket based transport implementation.
+	*.h	- linux specific headers.
+	
+
+Basic client-server protocol implementation
+
+Client Requests:
+	- Associate object
+	- Write request
+	- Read request
+	- Invalidate request
+	- Batch invalidate request
+
+Server receives requests and upcalls into server ASN.
+Server ASN then sends responses.
+
+
